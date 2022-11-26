@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Fitness Tracker</string>
+    <string name="StartButtonText">Start</string>
+    <string name="StatisticButtonText">Statistics</string>
+</resources>
