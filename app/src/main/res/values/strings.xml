@@ -4,4 +4,5 @@
     <string name="StatisticButtonText">Statistics</string>
     <string name="Temperature">Temperature</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="StopButton">Stop</string>
 </resources>

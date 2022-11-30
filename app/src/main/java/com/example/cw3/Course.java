@@ -64,7 +64,7 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
         activityNewCourseBinding = ActivityCourseBinding.inflate(LayoutInflater.from(this));
         activityNewCourseBinding.setViewmodel(model);
         setContentView(R.layout.activity_course);
-//        Objects.requireNonNull(getSupportActionBar()).hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -99,6 +99,15 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
         }
 //        locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //        a = new LatLng(locationGPS.getLatitude(),locationGPS.getLongitude());
+
+        // code to stop map
+        activityNewCourseBinding.StopButton.setOnClickListener(v -> {
+            model.setIsFinished(true);
+            finish();
+            Intent myService = new Intent(Course.this, MyService.class);
+            stopService(myService);
+//            courseFinished();
+        });
 
     }
 
@@ -166,14 +175,16 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
             return;
         }
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+//        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+//        mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.setOnCameraChangeListener(cameraPosition -> setMap(model.getLocations()));
     }
 
 
 
 
+    // maybe add line once walking complete.
     //Update map with a drawn line of the current route, shows start point
     private void setMap(List<LatLng> latLngs) {
         Log.d("size",String.valueOf(latLngs.size()));
