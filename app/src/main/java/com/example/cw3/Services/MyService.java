@@ -31,6 +31,8 @@ import java.util.TimerTask;
 
 //Service to track location, time and notifications
 public class MyService extends Service {
+    private LocationManager locationManager;
+    private MyLocationListener listener;
 
     //Declare objects and tick count
     private NotificationManager notifications;
@@ -60,6 +62,10 @@ public class MyService extends Service {
             return MyService.this.getNotifications();
         }
         public NotificationCompat.Builder getBuildNotification() { return MyService.this.getBuildNotification(); }
+        public void startGPS() {
+            MyService.this.startGPS();
+        }
+
     }
 
     //Initialise notifications
@@ -92,24 +98,75 @@ public class MyService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(pendingIntent);
     }
 
-    //Creates pending button intents for the notification bar
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public PendingIntent buttonIntents(String name) {
-        Intent intent = new Intent(name);
-        return PendingIntent.getBroadcast(MyService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-    }
+//    //Creates pending button intents for the notification bar
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    public PendingIntent buttonIntents(String name) {
+//        Intent intent = new Intent(name);
+//        return PendingIntent.getBroadcast(MyService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+//    }
 
     //Update notification buttons for pausing, resuming and finishing
     //Add custom notification logo then notify the notification manager of the changes
     public void startNotifications() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             buildNotification.setContentTitle("Running App")
-                    .setSmallIcon(R.drawable.running)
-                    .addAction(R.drawable.ic_launcher_background, "Start", buttonIntents("Start"))
-                    .addAction(R.drawable.ic_launcher_background, "Finish", buttonIntents("Finish"))
-                    .addAction(R.drawable.ic_launcher_background, "Pause", buttonIntents("Pause"));
+                    .setSmallIcon(R.drawable.running);
+//                    .addAction(R.drawable.ic_launcher_background, "Start", buttonIntents("Start"))
+//                    .addAction(R.drawable.ic_launcher_background, "Finish", buttonIntents("Finish"))
+//                    .addAction(R.drawable.ic_launcher_background, "Pause", buttonIntents("Pause"));
         }
         notifications.notify(1, buildNotification.build());
+    }
+
+    //Location tracker which requests user location at every update, only if permissions enabled
+    public void startGPS() {
+        if (locationManager == null) {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            listener = new MyLocationListener();
+            Log.d("Service","Repeating");
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Log.d("Service","Request Location");
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, listener);
+    }
+
+    //Pause GPS by removing location updates
+    public void pauseGPS() {
+        if (locationManager != null) {
+            locationManager.removeUpdates(listener);
+        }
+    }
+
+
+    //Location tracker subclass, on location change send a broadcast with the most recent latitude and longitude
+    public class MyLocationListener implements LocationListener {
+
+        public void onLocationChanged(final Location loc) {
+            Intent intentLocation = new Intent("Location");
+            intentLocation.putExtra("Latitude", loc.getLatitude());
+            intentLocation.putExtra("Longitude", loc.getLongitude());
+            sendBroadcast(intentLocation);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            // information about the signal, i.e. number of satellites
+            Log.d("g53mdp", "onStatusChanged: " + provider + " " + status);
+        }
+        @Override
+        public void onProviderEnabled(String provider) {
+            // the user enabled (for example) the GPS
+            Log.d("g53mdp", "onProviderEnabled: " + provider);
+        }
+        @Override
+        public void onProviderDisabled(String provider) {
+            // the user disabled (for example) the GPS
+            Log.d("g53mdp", "onProviderDisabled: " + provider);
+        }
     }
 
     //On creation of the service instantiate the MyService class and create the notification manager, and start the timer/GPS
@@ -121,6 +178,7 @@ public class MyService extends Service {
             createNotifications();
         }
         startNotifications();
+        startGPS();
     }
 
     @Override
