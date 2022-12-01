@@ -33,6 +33,8 @@ import java.util.TimerTask;
 public class MyService extends Service {
     private LocationManager locationManager;
     private MyLocationListener listener;
+    private Timer timer = null;
+    private int tickCount = 0;
 
     //Declare objects and tick count
     private NotificationManager notifications;
@@ -58,6 +60,9 @@ public class MyService extends Service {
         }
 
         //Getters for notification objects
+        public void startTimer() {
+            MyService.this.startTimer();
+        }
         public NotificationManager getNotifications() {
             return MyService.this.getNotifications();
         }
@@ -116,6 +121,24 @@ public class MyService extends Service {
 //                    .addAction(R.drawable.ic_launcher_background, "Pause", buttonIntents("Pause"));
         }
         notifications.notify(1, buildNotification.build());
+    }
+
+    //Timer thread which updates timer every second, sending a broadcast to be received
+    public void startTimer() {
+
+        timer = new Timer();
+        TimerTask myTask = new TimerTask() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void run() {
+                ++tickCount;
+                Intent intentTime = new Intent("Time");
+                intentTime.putExtra("Timer", tickCount);
+                sendBroadcast(intentTime);
+                Log.d("ServiceTimer",Integer.toString(tickCount));
+            }
+        };
+        timer.schedule(myTask, 1000, 1000);
     }
 
     //Location tracker which requests user location at every update, only if permissions enabled
@@ -179,6 +202,7 @@ public class MyService extends Service {
         }
         startNotifications();
         startGPS();
+        startTimer();
     }
 
     @Override

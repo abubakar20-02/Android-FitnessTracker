@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +56,7 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
     private ActivityCourseBinding activityNewCourseBinding;
     private GoogleMap mMap;
     private CourseVM model;
+    int time=0;
 
 
     @Override
@@ -86,6 +88,7 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         IntentFilter filter = new IntentFilter();
         filter.addAction("Location");
+        filter.addAction("Time");
         registerReceiver(receiver, filter);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -196,6 +199,9 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
                 PolylineOptions options = new PolylineOptions().color(Color.RED).width(10).addAll(latLngs);
                 mMap.addPolyline(options);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(latLngs.size() - 1), 15));
+                CalculationByDistance(latLngs.get(0),latLngs.get(latLngs.size()-1));
+                Double avgSpeed= (CalculationByDistance(latLngs.get(0),latLngs.get(latLngs.size()-1))/time)*3600;
+                Log.d("Speed",Double.toString(avgSpeed));
             }
             else {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -217,6 +223,32 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
+    // https://stackoverflow.com/questions/14394366/find-distance-between-two-points-on-map-using-google-map-api-v2
+    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+
+        return Radius * c;
+    }
+
     //Create Broadcast Receiver to get location, time and notification button press updates
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -235,6 +267,10 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
 //                            weatherByLocation(String.valueOf(latitude), String.valueOf(longitude));
 //                        }
                         break;
+                    case "Time":
+                        //If intent is time then save the time to course object and update the notification
+                        time = intent.getIntExtra("Timer", 0);
+                        model.setTime(time);
                 }
             }
 
