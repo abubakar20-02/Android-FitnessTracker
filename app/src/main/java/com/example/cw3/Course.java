@@ -48,6 +48,9 @@ import java.util.List;
 import java.util.Objects;
 
 
+//https://www.womanandhome.com/health-wellbeing/fitness/calories-burned-walking/
+//https://www.geeksforgeeks.org/how-to-build-a-step-counting-application-in-android-studio/
+
 public class Course extends AppCompatActivity implements OnMapReadyCallback {
 
     private MyService.MyBinder myService = null;

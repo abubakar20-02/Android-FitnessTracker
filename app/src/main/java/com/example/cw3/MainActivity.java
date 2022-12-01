@@ -37,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        //When the start button is pressed go to it's activity
+        activityMainBinding.ProfileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserProfile.class);
+            startActivity(intent);
+        });
+
     }
 
     //When the activity is destroyed, remove all LiveData observers

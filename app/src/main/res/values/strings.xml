@@ -5,4 +5,12 @@
     <string name="Temperature">Temperature</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="StopButton">Stop</string>
+    <string name="UserWeightText">Weight: </string>
+    <string name="UserAgeText">Age: </string>
+    <string name="WeightHint">Weight</string>
+    <string name="AgeHint">Age</string>
+    <string name="NameHint">Name</string>
+    <string name="UserNameText">Name: </string>
+    <string name="SaveButton">Save</string>
+    <string name="ProfileButton">Profile</string>
 </resources>

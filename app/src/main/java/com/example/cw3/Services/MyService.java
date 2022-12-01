@@ -168,6 +168,7 @@ public class MyService extends Service {
     //Location tracker subclass, on location change send a broadcast with the most recent latitude and longitude
     public class MyLocationListener implements LocationListener {
 
+        @Override
         public void onLocationChanged(final Location loc) {
             Intent intentLocation = new Intent("Location");
             intentLocation.putExtra("Latitude", loc.getLatitude());

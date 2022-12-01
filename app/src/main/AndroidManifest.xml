@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,8 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cw3"
         tools:targetApi="31">
-
-        <!-- https://www.youtube.com/watch?v=WouAQmqJI_I&ab_channel=Codeible
+        <activity
+            android:name=".UserProfile"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <!--
+         https://www.youtube.com/watch?v=WouAQmqJI_I&ab_channel=Codeible
              TODO: Before you run your application, you need a Google Maps API key.
 
              To get one, follow the directions here:
@@ -37,12 +43,14 @@
             android:value="AIzaSyAJLy_PE3Q5ofYyzW5cB8DCgt_fCJTN5NU" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /> <!--version-->
+            android:value="@integer/google_play_services_version" /> <!-- version -->
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="barcode" /> <!--barcode,face,ocr-->
+            android:value="barcode" /> <!-- barcode,face,ocr -->
         <!-- Necessary for apps that target Android 9.0 or higher -->
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <activity
             android:name=".StatisticActivity"
