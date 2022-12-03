@@ -1,14 +1,17 @@
 package com.example.cw3.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "course_table")
+@Entity(tableName = "user_table")
 public class UserProfileEntities {
     //Declare table name
 
         //Declare table elements
+        @PrimaryKey
+        @NonNull
         @ColumnInfo(name = "UserName")
         private String UserName;
 
@@ -40,5 +43,12 @@ public class UserProfileEntities {
 
         public void setUserWeight(double userWeight) {
                 UserWeight = userWeight;
+        }
+
+        public void deleteAll(){}
+
+        public UserProfileEntities(){
+
+                UserName = null;
         }
 }

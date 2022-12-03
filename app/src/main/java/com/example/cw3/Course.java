@@ -273,7 +273,7 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
                     case "Time":
                         //If intent is time then save the time to course object and update the notification
                         time = intent.getIntExtra("Timer", 0);
-                        model.setTime(time);
+//                        model.setTime(time);
                 }
             }
 

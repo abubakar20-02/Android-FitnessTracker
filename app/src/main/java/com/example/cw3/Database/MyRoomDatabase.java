@@ -10,17 +10,20 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.cw3.DAO.CourseDao;
+import com.example.cw3.DAO.UserProfileDao;
 import com.example.cw3.entities.Course;
+import com.example.cw3.entities.UserProfileEntities;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 //Declare database entities
-@Database(entities = {Course.class}, version = 5, exportSchema = false) // drop and recreate
+@Database(entities = {Course.class, UserProfileEntities.class}, version = 5, exportSchema = false) // drop and recreate
 public abstract class MyRoomDatabase extends RoomDatabase {
 
     //Declare dao objects
     public abstract CourseDao courseDao();
+    public abstract UserProfileDao userProfileDao();
 
     private static volatile MyRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -53,6 +56,9 @@ public abstract class MyRoomDatabase extends RoomDatabase {
 
                 CourseDao courseDao = INSTANCE.courseDao();
                 courseDao.deleteAll();
+
+//                UserProfileDao userProfileDao = INSTANCE.userProfileDao();
+//                userProfileDao.deleteAll();
             });
         }
     };
