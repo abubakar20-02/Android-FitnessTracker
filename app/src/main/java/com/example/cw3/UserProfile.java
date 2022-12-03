@@ -3,8 +3,12 @@ package com.example.cw3;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cw3.databinding.ActivityCourseBinding;
 import com.example.cw3.databinding.ActivityUserProfileBinding;
@@ -16,6 +20,7 @@ import java.util.Objects;
 public class UserProfile extends AppCompatActivity {
     private UserProfileVM model;
     ActivityUserProfileBinding activityUserProfileBinding;
+    EditText a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,10 @@ public class UserProfile extends AppCompatActivity {
         activityUserProfileBinding.setLifecycleOwner(this);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        model.setUserName("abu");
+        activityUserProfileBinding.SaveButton.setOnClickListener(v -> {
+            a = (EditText) findViewById(R.id.UserName);
+            model.setUserName(a.getText().toString());
+        });
+
     }
 }
