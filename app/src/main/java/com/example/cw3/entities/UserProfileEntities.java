@@ -10,6 +10,9 @@ public class UserProfileEntities {
     //Declare table name
 
         //Declare table elements
+
+
+
         @PrimaryKey
         @NonNull
         @ColumnInfo(name = "UserName")
@@ -20,6 +23,7 @@ public class UserProfileEntities {
 
         @ColumnInfo(name = "UserWeight")
         private double UserWeight;
+
 
         public String getUserName() {
                 return UserName;

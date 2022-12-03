@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 //Declare database entities
-@Database(entities = {Course.class, UserProfileEntities.class}, version = 5, exportSchema = false) // drop and recreate
+@Database(entities = {Course.class, UserProfileEntities.class}, version = 6, exportSchema = false) // drop and recreate
 public abstract class MyRoomDatabase extends RoomDatabase {
 
     //Declare dao objects
@@ -57,8 +57,8 @@ public abstract class MyRoomDatabase extends RoomDatabase {
                 CourseDao courseDao = INSTANCE.courseDao();
                 courseDao.deleteAll();
 
-//                UserProfileDao userProfileDao = INSTANCE.userProfileDao();
-//                userProfileDao.deleteAll();
+                UserProfileDao userProfileDao = INSTANCE.userProfileDao();
+                userProfileDao.deleteAll();
             });
         }
     };

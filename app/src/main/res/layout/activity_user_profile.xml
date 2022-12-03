@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="usermodel"
-            type="com.example.cw3.viewmodels.UserProfileVM" />
-    </data>
+<!--    <data>-->
+<!--        <variable-->
+<!--            name="usermodel"-->
+<!--            type="com.example.cw3.viewmodels.UserProfileVM" />-->
+<!--    </data>-->
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,8 +42,7 @@
                     android:id="@+id/UserNameText"
                     android:layout_width="147dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="24dp"
-                    android:text="@{usermodel.userName}" />
+                    android:layout_marginTop="24dp" />
 
                 <EditText
                     android:id="@+id/UserName"
@@ -69,8 +68,7 @@
                     android:id="@+id/UserAgeText"
                     android:layout_width="147dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/UserAgeText" />
+                    android:layout_marginTop="24dp" />
 
                 <EditText
                     android:id="@+id/UserAge"
@@ -95,8 +93,7 @@
                     android:id="@+id/UserWeightText"
                     android:layout_width="147dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/UserWeightText" />
+                    android:layout_marginTop="24dp" />
 
                 <EditText
                     android:id="@+id/UserWeight"

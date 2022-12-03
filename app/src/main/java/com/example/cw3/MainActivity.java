@@ -1,7 +1,6 @@
 package com.example.cw3;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         //When the start button is pressed go to it's activity
         activityMainBinding.ProfileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, UserProfile.class);
+            Intent intent = new Intent(MainActivity.this, users.class);
             startActivity(intent);
         });
 
