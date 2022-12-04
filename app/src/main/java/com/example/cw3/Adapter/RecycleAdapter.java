@@ -98,8 +98,8 @@ public class RecycleAdapter extends androidx.recyclerview.widget.RecyclerView.Ad
         void bind(UserProfileEntities userProfileEntities) {
             if(userProfileEntities != null) {
                 UserName.setText(userProfileEntities.getUserName());
-                UserAge.setText(userProfileEntities.getUserAge());
-                UserWeight.setText(df.format(userProfileEntities.getUserWeight()));
+                UserAge.setText(Integer.toString(userProfileEntities.getUserAge()));
+                UserWeight.setText((df.format(userProfileEntities.getUserWeight())));
             }
         }
 

@@ -24,6 +24,8 @@ public class UserProfile {
         userProfileDao = db.userProfileDao();
     }
 
+    public LiveData<List<UserProfileEntities>> getAllUsers() { return userProfileDao.SelectAll(); }
+
     //Create functions which link dao queries to the viewmodels
 //    public LiveData<String> getUserName() { return userProfileDao.getUserName(); }
 

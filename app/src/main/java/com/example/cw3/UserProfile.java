@@ -1,20 +1,11 @@
 package com.example.cw3;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.cw3.databinding.ActivityCourseBinding;
 import com.example.cw3.databinding.ActivityUserProfileBinding;
-import com.example.cw3.viewmodels.CourseVM;
-import com.example.cw3.viewmodels.UserProfileVM;
 
 import java.util.Objects;
 
