@@ -95,6 +95,7 @@ public class RecycleAdapter extends androidx.recyclerview.widget.RecyclerView.Ad
         }
 
         //Bind view items to the associated data values
+        @SuppressLint("SetTextI18n")
         void bind(UserProfileEntities userProfileEntities) {
             if(userProfileEntities != null) {
                 UserName.setText(userProfileEntities.getUserName());

@@ -1,45 +1,41 @@
 package com.example.cw3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.widget.EditText;
 
 import com.example.cw3.databinding.ActivityUserProfileBinding;
+import com.example.cw3.viewmodels.AddUserVM;
 
 import java.util.Objects;
 
 public class UserProfile extends AppCompatActivity {
 //    private UserProfileVM model;
     ActivityUserProfileBinding activityUserProfileBinding;
-//    TextView a;
+    EditText a;
+    EditText b;
+    EditText c;
+    AddUserVM model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        model = new ViewModelProvider(this).get(UserProfileVM.class);
+        model = new ViewModelProvider(this).get(AddUserVM.class);
         activityUserProfileBinding = ActivityUserProfileBinding.inflate(LayoutInflater.from(this));
         setContentView(activityUserProfileBinding.getRoot());
-//        activityUserProfileBinding.setUsermodel(model);
-//        activityUserProfileBinding.setLifecycleOwner(this);
+        activityUserProfileBinding.setUsermodel(model);
+        activityUserProfileBinding.setLifecycleOwner(this);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-//        a = (TextView) findViewById(R.id.UserName);
-//        a.setText(model.getUserName().toString());
-
-//        activityUserProfileBinding.SaveButton.setOnClickListener(v -> {
-////            model.setUserName(a.getText().toString());
-////            a= (EditText) findViewById(R.id.UserAge);
-////            model.setUserAge(Integer.parseInt(a.getText().toString()));
-////            a= (EditText) findViewById(R.id.UserWeight);
-////            model.setUserWeight(Double.valueOf(a.getText().toString()));
-////            model.getUserName().observe(this, new Observer<String>() {
-////                @Override
-////                public void onChanged(String s) {
-////                    model.Save();
-////                }
-////            });
-//        });
-
+        activityUserProfileBinding.SaveButton.setOnClickListener(v ->{
+        a = (EditText) findViewById(R.id.UserName);
+        b= (EditText) findViewById(R.id.UserAge);
+        c= (EditText) findViewById(R.id.UserWeight);
+        model.AddUserProfileToDB(a.getText().toString(),Integer.parseInt(b.getText().toString()),Double.parseDouble(c.getText().toString()));
+        finish();
+        });
     }
 }

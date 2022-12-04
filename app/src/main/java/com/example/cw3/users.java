@@ -4,10 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -22,7 +22,7 @@ import java.util.Objects;
 public class users extends AppCompatActivity {
 
     ActivityUsersBinding activityUsersBinding;
-    com.example.cw3.Adapter.RecycleAdapter RecycleAdapter;
+    private RecycleAdapter RecycleAdapter;
     UserVM model;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,16 @@ public class users extends AppCompatActivity {
         activityUsersBinding.setViewmodel(model);
         activityUsersBinding.setLifecycleOwner(this);
         Objects.requireNonNull(getSupportActionBar()).hide();
+        //Adapter for showing all courses
+        RecycleAdapter  = new RecycleAdapter(this);
 
         activityUsersBinding.AddUser.setOnClickListener(v -> {
             Intent intent = new Intent(users.this, UserProfile.class);
             startActivity(intent);
         });
+        activityUsersBinding.RecyclerView.setAdapter(RecycleAdapter);
+        activityUsersBinding.RecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activityUsersBinding.RecyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
 //        activityUsersBinding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -53,16 +58,28 @@ public class users extends AppCompatActivity {
 //            }
 //        });
 
-        //Adapter for showing all courses
-         RecycleAdapter  = new RecycleAdapter(this);
 //         model.SelectAll().observe(this ,a -> model.SelectAll());
 //        model.getAllUsers().observe(this, a -> RecycleAdapter.setData(a));
 
-        model.SelectAll().observe(this, userProfiles -> RecycleAdapter.setData(userProfiles));
+//        model.getCoursesByDate().observe(this, courses -> model.setByDate(courses, activityMainBinding.sortStats.getSelectedItem().toString()));
 
-        activityUsersBinding.RecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        activityUsersBinding.RecyclerView.setItemAnimator(new DefaultItemAnimator());
-        activityUsersBinding.RecyclerView.setAdapter(RecycleAdapter);
+        model.GetAllUserProfiles().observe(this, courses -> model.setByRating(courses));
+
+        model.getAllUsers().observe(this, userProfiles -> RecycleAdapter.setData(userProfiles));
+
+
+
+        //When a recycler view item is selected ask for storage permissions to view the course
+        RecycleAdapter.setClickListener((view, position) -> {
+
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                startViewCourse(position);
+            }
+            else {
+                model.setListPosition(position);
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
+            }
+        });
 
     }
 
@@ -77,4 +94,24 @@ public class users extends AppCompatActivity {
 //            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
 //        }
 //    });
+
+    @Override
+    protected void onStart() {
+        Log.d("Start", "Start");
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        model.getAllUsers().removeObservers(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+//        model.SelectAll().removeObservers(this);
+        super.onPause();
+
+
+    }
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 //Declare database entities
-@Database(entities = {Course.class, UserProfileEntities.class}, version = 6, exportSchema = false) // drop and recreate
+@Database(entities = {Course.class, UserProfileEntities.class}, version = 11, exportSchema = false) // drop and recreate
 public abstract class MyRoomDatabase extends RoomDatabase {
 
     //Declare dao objects
