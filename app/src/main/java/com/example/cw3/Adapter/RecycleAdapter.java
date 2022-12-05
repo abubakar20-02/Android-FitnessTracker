@@ -77,6 +77,17 @@ public class RecycleAdapter extends androidx.recyclerview.widget.RecyclerView.Ad
         }
     }
 
+    //Get the ID of a selected item in the list
+    public String getUserName(int position) {
+        return data.get(position).getUserName();
+    }
+
+    public int getUserAge(int position) {
+        return data.get(position).getUserAge();
+    }
+
+    public double getUserWeight(int position){return data.get(position).getUserWeight();}
+
     //Describes an item view and metadata about its place within the RecyclerView
     public class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder implements View.OnClickListener {
 

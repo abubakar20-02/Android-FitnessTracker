@@ -31,6 +31,9 @@ public interface UserProfileDao {
     @Query("SELECT * FROM user_table")
     LiveData<List<UserProfileEntities>> SelectAll();
 
+    @Query("DELETE FROM user_table WHERE UserName== :userName")
+    void deleteProfile(String userName);
+
 //
 //    @Query("SELECT UserAge FROM user_table")
 //    LiveData<Integer> getUserAge();

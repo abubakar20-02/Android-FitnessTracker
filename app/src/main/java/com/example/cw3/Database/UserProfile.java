@@ -45,4 +45,8 @@ public class UserProfile {
         MyRoomDatabase.databaseWriteExecutor.execute(() -> userProfileDao.InsertUserProfile(UserProfile));
     }
 
+    public void deleteUserProfile(String userName){
+        MyRoomDatabase.databaseWriteExecutor.execute(() -> userProfileDao.deleteProfile(userName));
+    }
+
 }

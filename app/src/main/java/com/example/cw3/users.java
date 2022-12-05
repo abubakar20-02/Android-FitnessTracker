@@ -71,12 +71,25 @@ public class users extends AppCompatActivity {
 
         //When a recycler view item is selected ask for storage permissions to view the course
         RecycleAdapter.setClickListener((view, position) -> {
+            Log.d("position",Integer.toString(position));
+            Intent intent = new Intent(users.this, UserSelected.class);
+            Log.d("UserName Selected",RecycleAdapter.getUserName(position));
+            Log.d("UserAge Selected",Integer.toString(RecycleAdapter.getUserAge(position)));
+            Log.d("UserWeight Selected",Double.toString(RecycleAdapter.getUserWeight(position)))
+;
+            intent.putExtra("userName",RecycleAdapter.getUserName(position));
+            intent.putExtra("userAge",RecycleAdapter.getUserAge(position));
+            intent.putExtra("userWeight",RecycleAdapter.getUserWeight(position));
+//            intent.putExtra("message_key", str);
+            startActivity(intent);
 
             if (ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 //                startViewCourse(position);
+                Log.d("1","1");
             }
             else {
                 model.setListPosition(position);
+                Log.d("2","2");
 //                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
             }
         });
