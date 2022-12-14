@@ -24,6 +24,9 @@ public class UserProfileEntities {
         @ColumnInfo(name = "UserWeight")
         private double UserWeight;
 
+        @ColumnInfo(name = "UserSelected")
+        private boolean UserSelected;
+
 
         public String getUserName() {
                 return UserName;
@@ -51,8 +54,17 @@ public class UserProfileEntities {
 
         public void deleteAll(){}
 
+        public boolean isUserSelected() {
+                return UserSelected;
+        }
+
+        public void setUserSelected(boolean userSelected) {
+                UserSelected = userSelected;
+        }
+
         public UserProfileEntities(){
 
                 UserName = null;
         }
+
 }

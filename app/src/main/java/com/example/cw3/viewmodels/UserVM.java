@@ -17,6 +17,7 @@ public class UserVM extends ObservableVM{
     private final MutableLiveData<List<UserProfileEntities>> userProfile;
     private final LiveData<List<UserProfileEntities>> ProfileList;
     private List<UserProfileEntities> UserList;
+    private LiveData<String> SelectedUser;
     private int listPosition;
 
 
@@ -29,6 +30,7 @@ public class UserVM extends ObservableVM{
         userProfile = new MutableLiveData<>();
         userProfile.setValue(new ArrayList<>());
         ProfileList = repository.getAllUsers();
+        SelectedUser = repository.getSelectedUser();
 
     }
 
@@ -42,6 +44,8 @@ public class UserVM extends ObservableVM{
 
 
     public MutableLiveData<List<UserProfileEntities>> getAllUsers() { return userProfile; }
+
+    public LiveData<String> GetSelectedUser() { return SelectedUser; }
 
     //Get position in list where user selected
     public int getListPosition() {

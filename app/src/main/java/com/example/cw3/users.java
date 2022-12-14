@@ -80,6 +80,7 @@ public class users extends AppCompatActivity {
             intent.putExtra("userName",RecycleAdapter.getUserName(position));
             intent.putExtra("userAge",RecycleAdapter.getUserAge(position));
             intent.putExtra("userWeight",RecycleAdapter.getUserWeight(position));
+            intent.putExtra("userSelected",RecycleAdapter.getUserSelected(position));
 //            intent.putExtra("message_key", str);
             startActivity(intent);
 

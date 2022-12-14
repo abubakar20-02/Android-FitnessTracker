@@ -21,9 +21,12 @@ public class AddUserVM extends ObservableVM{
         userProfileEntities.setUserName(UserName);
         userProfileEntities.setUserAge(UserAge);
         userProfileEntities.setUserWeight(UserWeight);
+        userProfileEntities.setUserSelected(false);
+
         Log.d("UserName", userProfileEntities.getUserName());
         Log.d("UserAge", Integer.toString(userProfileEntities.getUserAge()));
         Log.d("UserWeight", Double.toString(userProfileEntities.getUserWeight()));
+
         repository.insertUserProfile(userProfileEntities);
         }
 }

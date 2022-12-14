@@ -88,6 +88,8 @@ public class RecycleAdapter extends androidx.recyclerview.widget.RecyclerView.Ad
 
     public double getUserWeight(int position){return data.get(position).getUserWeight();}
 
+    public boolean getUserSelected(int position){return data.get(position).isUserSelected();}
+
     //Describes an item view and metadata about its place within the RecyclerView
     public class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder implements View.OnClickListener {
 

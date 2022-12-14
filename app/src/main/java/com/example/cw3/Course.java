@@ -194,7 +194,7 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
     //Update map with a drawn line of the current route, shows start point
     private void setMap(List<LatLng> latLngs) {
         Log.d("size",String.valueOf(latLngs.size()));
-
+        Double distance =0.0;
         if (mMap != null) {
 //                mMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Start").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             if (!latLngs.isEmpty()) {
@@ -202,8 +202,9 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
                 PolylineOptions options = new PolylineOptions().color(Color.RED).width(10).addAll(latLngs);
                 mMap.addPolyline(options);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(latLngs.size() - 1), 15));
-                CalculationByDistance(latLngs.get(0),latLngs.get(latLngs.size()-1));
+                distance = CalculationByDistance(latLngs.get(latLngs.size()-1),latLngs.get(latLngs.size()))+distance;
                 Double avgSpeed= (CalculationByDistance(latLngs.get(0),latLngs.get(latLngs.size()-1))/time)*3600;
+                Log.d("distance",Double.toString(distance));
                 Log.d("Speed",Double.toString(avgSpeed));
             }
             else {

@@ -31,9 +31,9 @@ public class UserProfile extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         activityUserProfileBinding.SaveButton.setOnClickListener(v ->{
-        a = (EditText) findViewById(R.id.UserName);
-        b= (EditText) findViewById(R.id.UserAge);
-        c= (EditText) findViewById(R.id.UserWeight);
+        a = findViewById(R.id.UserName);
+        b= findViewById(R.id.UserAge);
+        c= findViewById(R.id.UserWeight);
         model.AddUserProfileToDB(a.getText().toString(),Integer.parseInt(b.getText().toString()),Double.parseDouble(c.getText().toString()));
         finish();
         });

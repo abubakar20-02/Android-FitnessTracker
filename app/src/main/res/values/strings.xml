@@ -14,4 +14,5 @@
     <string name="SaveButton">Save</string>
     <string name="ProfileButton">Profile</string>
     <string name="UsersText">User</string>
+    <string name="userSelectedText">User selected:</string>
 </resources>

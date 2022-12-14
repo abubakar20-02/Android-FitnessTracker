@@ -17,6 +17,8 @@ public class UserSelectedVM extends ObservableVM{
     public String userAge;
     @Bindable
     public String userWeight;
+    @Bindable
+    public String userSelected;
 
     private final UserProfile repository;
 
@@ -33,7 +35,10 @@ public class UserSelectedVM extends ObservableVM{
     public void addUserWeight(double Weight){
         userWeight=Double.toString(Weight);
     }
+    public void addUserSelected(boolean selected) {userSelected= String.valueOf(selected);}
     public void DeleteProfile(){
         repository.deleteUserProfile(userName);
     }
+    public void RemoveAllSelectedProfile() { repository.update(false); }
+    public void selectProfile() { repository.selectProfile(userName); }
 }

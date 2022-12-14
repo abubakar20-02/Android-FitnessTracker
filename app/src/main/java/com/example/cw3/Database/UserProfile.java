@@ -3,12 +3,8 @@ package com.example.cw3.Database;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.example.cw3.DAO.CourseDao;
 import com.example.cw3.DAO.UserProfileDao;
-import com.example.cw3.entities.Course;
-import com.example.cw3.entities.CoursePoint;
 import com.example.cw3.entities.UserProfileEntities;
 
 import java.util.List;
@@ -25,6 +21,8 @@ public class UserProfile {
     }
 
     public LiveData<List<UserProfileEntities>> getAllUsers() { return userProfileDao.SelectAll(); }
+
+//    public LiveData<UserProfileEntities> getSelectedUser() {return userProfileDao.}
 
     //Create functions which link dao queries to the viewmodels
 //    public LiveData<String> getUserName() { return userProfileDao.getUserName(); }
@@ -49,4 +47,19 @@ public class UserProfile {
         MyRoomDatabase.databaseWriteExecutor.execute(() -> userProfileDao.deleteProfile(userName));
     }
 
+    public void update(boolean a) {
+        MyRoomDatabase.databaseWriteExecutor.execute(() -> userProfileDao.updateUserProfiles(a));
+    }
+
+    public void selectProfile(String userName) {
+        MyRoomDatabase.databaseWriteExecutor.execute(() -> userProfileDao.updateUserProfile(userName,true));
+    }
+
+    public LiveData<String> getSelectedUser() {
+        return userProfileDao.getSelectedUser(true);
+    }
+
+//    public void deleteUserProfile(boolean UserSelected){
+//        MyRoomDatabase.databaseWriteExecutor.execute(() -> userProfileDao.(UserSelected));
+//    }
 }
