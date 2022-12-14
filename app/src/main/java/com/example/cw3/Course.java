@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.SphericalUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -60,6 +61,8 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private CourseVM model;
     int time=0;
+    Double distance =0.0;
+    double speed=0.0;
 
 
     @Override
@@ -182,9 +185,11 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setAllGesturesEnabled(false);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
 //        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 //        mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.setOnCameraChangeListener(cameraPosition -> setMap(model.getLocations()));
+        setMap(model.getLocations());
+//        mMap.setOnCameraChangeListener(cameraPosition -> setMap(model.getLocations()));
     }
 
 
@@ -193,19 +198,17 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
     // maybe add line once walking complete.
     //Update map with a drawn line of the current route, shows start point
     private void setMap(List<LatLng> latLngs) {
-        Log.d("size",String.valueOf(latLngs.size()));
-        Double distance =0.0;
+//        Log.d("size",String.valueOf(latLngs.size()));
         if (mMap != null) {
 //                mMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Start").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             if (!latLngs.isEmpty()) {
                 mMap.clear();
+//                mMap.addMarker(new MarkerOptions().position(latLngs.get(0)).title("Start").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                 PolylineOptions options = new PolylineOptions().color(Color.RED).width(10).addAll(latLngs);
                 mMap.addPolyline(options);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(latLngs.size() - 1), 15));
-//                distance = CalculationByDistance(latLngs.get(latLngs.size()-1),latLngs.get(latLngs.size()))+distance;
-                Double avgSpeed= (CalculationByDistance(latLngs.get(0),latLngs.get(latLngs.size()-1))/time)*3600;
-                Log.d("distance",Double.toString(distance));
-                Log.d("Speed",Double.toString(avgSpeed));
+                ComputeDistance(latLngs);
+                Log.d("distance in m",Double.toString(distance));
             }
             else {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -227,30 +230,23 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
-    // https://stackoverflow.com/questions/14394366/find-distance-between-two-points-on-map-using-google-map-api-v2
-    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
-        int Radius = 6371;// radius of earth in Km
-        double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
-        double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1))
-                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
-                * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        double valueResult = Radius * c;
-        double km = valueResult / 1;
-        DecimalFormat newFormat = new DecimalFormat("####");
-        int kmInDec = Integer.valueOf(newFormat.format(km));
-        double meter = valueResult % 1000;
-        int meterInDec = Integer.valueOf(newFormat.format(meter));
-        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
-                + " Meter   " + meterInDec);
+    private void ComputeDistance(List<LatLng> latLngs) {
+        double InitialDistance = 0.0;
+        if(latLngs.size()==1){
+            InitialDistance=CalculationByDistance(latLngs.get(0), latLngs.get(latLngs.size()-1));
+        }
+        if (latLngs.size()>2){
+            InitialDistance=CalculationByDistance(latLngs.get(latLngs.size()-2), latLngs.get(latLngs.size()-1));
+        }
+        // distance in meters
+        distance=distance+InitialDistance;
+        model.setSpeed(InitialDistance);
+        model.setDistance(distance);
+    }
 
-        return Radius * c;
+    // https://stackoverflow.com/questions/14394366/find-distance-between-two-points-on-map-using-google-map-api-v2/15351351#15351351
+    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        return SphericalUtil.computeDistanceBetween(StartP, EndP);
     }
 
     //Create Broadcast Receiver to get location, time and notification button press updates
@@ -265,19 +261,32 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
                         //If intent is location then save the given points to course object
                         double latitude = intent.getDoubleExtra("Latitude", 0.0);
                         double longitude = intent.getDoubleExtra("Longitude", 0.0);
-                        Log.d("sadjhkash","asjdkhndhjkasdkjnbasdk");
                         model.savePoints(new LatLng(latitude, longitude));
-//                        if (model.getLocations().size() == 1) {
-//                            weatherByLocation(String.valueOf(latitude), String.valueOf(longitude));
-//                        }
                         break;
                     case "Time":
                         //If intent is time then save the time to course object and update the notification
+                        // time is used to update google maps every 1 second
                         time = intent.getIntExtra("Timer", 0);
-//                        model.setTime(time);
+                        model.setTime(time);
+                        setMap(model.getLocations());
+                        break;
                 }
+
             }
 
     };
+
+    //Code to save instance when activity is destroyed.
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putDouble("Distance", distance);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        distance = savedInstanceState.getDouble("Distance");
+    }
 
 }

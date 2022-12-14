@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toTopOf="@+id/StopButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CaloriesBurntText"
+        app:layout_constraintTop_toBottomOf="@+id/SpeedText"
         tools:context=".activities.NewCourse"
         tools:layout="@android:layout/simple_gallery_item" />
 
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:text="@string/DistanceText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -59,12 +59,12 @@
         app:layout_constraintTop_toBottomOf="@+id/DistanceText" />
 
     <TextView
-        android:id="@+id/CaloriesBurntText"
+        android:id="@+id/SpeedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/CaloriesBurntText"
+        android:text="@string/SpeedText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ElapsedTimeText" />
 
@@ -72,9 +72,9 @@
         android:id="@+id/Distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
+        android:text="@{viewmodel.distance}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,17 +84,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="@{viewmodel.getTime()}"
+        android:text="@{viewmodel.time}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Distance" />
 
     <TextView
-        android:id="@+id/CaloriesBurnt"
+        android:id="@+id/Speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
+        android:text="@{viewmodel.speed}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ElapsedTime" />
 

@@ -18,4 +18,5 @@
     <string name="CaloriesBurntText">Calories burnt: </string>
     <string name="ElapsedTimeText">Elapsed Time:</string>
     <string name="DistanceText">Distance</string>
+    <string name="SpeedText">"Speed: "</string>
 </resources>

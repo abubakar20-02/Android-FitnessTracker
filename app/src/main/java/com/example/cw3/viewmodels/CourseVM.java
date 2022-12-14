@@ -11,9 +11,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.databinding.Bindable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 //import com.example.cw3.BR;
+import com.example.cw3.BR;
 import com.example.cw3.Database.MyRepository;
 import com.example.cw3.entities.Course;
 import com.example.cw3.entities.CoursePoint;
@@ -36,6 +38,7 @@ public class CourseVM extends ObservableVM {
     private final List<LatLng> locations;
     private final List<Double> distanceStats;
     private final List<Integer> timeStats;
+    private int seconds;
 
     private String imageURL;
 
@@ -59,13 +62,16 @@ public class CourseVM extends ObservableVM {
     @Bindable
     private MutableLiveData<String> weather;
 
+    @Bindable
+    private MutableLiveData<String> speed;
+
     //Button stat booleans
     private boolean isPaused = false;
     private boolean isStarted = false;
     private boolean isFinished = false;
     private boolean pausedLocation = false;
     //Format doubles
-    private static final DecimalFormat df = new DecimalFormat("0.00");
+//    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public CourseVM(@NonNull Application application) {
         super(application);
@@ -106,6 +112,19 @@ public class CourseVM extends ObservableVM {
 
     //Getter for course ID
     public int getCourseID() { return course.getCourseID(); }
+
+    //Set the current time, format the input, update course object and getter, then notify that the value has changed for data binding
+    public void setTime(int seconds) {
+        this.seconds=seconds;
+        course.setTime(seconds);
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        seconds = seconds % 60;
+        String timeFormatted = String.format(Locale.UK,"%02d:%02d:%02d", hours, minutes, seconds);
+        getTime().setValue(timeFormatted);
+        notifyPropertyChanged(BR.time);
+    }
+
 
     //Get the current course points, if null then set to a new array list
     public MutableLiveData<List<CoursePoint>> getCoursePoints() {
@@ -306,10 +325,17 @@ public class CourseVM extends ObservableVM {
     public MutableLiveData<String> getDistance() {
         if (distance == null) {
             distance = new MutableLiveData<>();
-            distance.setValue("0.00");
+            distance.setValue("0.00 km");
         }
         return distance;
     }
+
+    public void setDistance(double distance) {
+        getDistance().setValue(String.format("%.2f",(distance / 1000)) + " km");
+        notifyPropertyChanged(BR.distance);
+    }
+
+
 
 //    //Set the current distance, calculate distance between previous location and current, update course object and set pace and calories,
 //    //then notify that the value has changed for data binding
@@ -441,5 +467,17 @@ public class CourseVM extends ObservableVM {
         else {
             Toast.makeText(getApplication().getApplicationContext(), "Course not saved, as no distance traversed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void setSpeed(Double distance) {
+        getSpeed().setValue(String.format("%.2f",((distance*3.6)))+ " km/hr");
+        notifyPropertyChanged(BR.speed);
+    }
+    public MutableLiveData<String> getSpeed(){
+        if (speed == null) {
+            speed = new MutableLiveData<>();
+            speed.setValue("0.00 km/hr");
+        }
+        return speed;
     }
 }
