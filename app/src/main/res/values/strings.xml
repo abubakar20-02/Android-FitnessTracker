@@ -15,4 +15,7 @@
     <string name="ProfileButton">Profile</string>
     <string name="UsersText">User</string>
     <string name="userSelectedText">User selected:</string>
+    <string name="CaloriesBurntText">Calories burnt: </string>
+    <string name="ElapsedTimeText">Elapsed Time:</string>
+    <string name="DistanceText">Distance</string>
 </resources>

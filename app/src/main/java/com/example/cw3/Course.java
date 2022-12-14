@@ -202,7 +202,7 @@ public class Course extends AppCompatActivity implements OnMapReadyCallback {
                 PolylineOptions options = new PolylineOptions().color(Color.RED).width(10).addAll(latLngs);
                 mMap.addPolyline(options);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngs.get(latLngs.size() - 1), 15));
-                distance = CalculationByDistance(latLngs.get(latLngs.size()-1),latLngs.get(latLngs.size()))+distance;
+//                distance = CalculationByDistance(latLngs.get(latLngs.size()-1),latLngs.get(latLngs.size()))+distance;
                 Double avgSpeed= (CalculationByDistance(latLngs.get(0),latLngs.get(latLngs.size()-1))/time)*3600;
                 Log.d("distance",Double.toString(distance));
                 Log.d("Speed",Double.toString(avgSpeed));
