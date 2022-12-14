@@ -19,10 +19,6 @@ public interface UserProfileDao {
     void InsertUserProfile(UserProfileEntities UserProfile);
 
 
-//    @Query("SELECT UserName FROM user_table")
-//    LiveData<List<UserProfileEntities>> getUserName();
-
-    //Delete all courses
     @Query("DELETE FROM user_table")
     int deleteAll();
 
@@ -42,46 +38,4 @@ public interface UserProfileDao {
     @Query("SELECT userName FROM user_table WHERE UserSelected== :userSelected")
     LiveData<String> getSelectedUser(boolean userSelected);
 
-//    @Query("SELECT * FROM user_table WHERE UserSelected == :userSelected")
-//    <UserProfileEntities> getSelectedUser(boolean userSelected);
-//
-//    @Query("SELECT UserAge FROM user_table")
-//    LiveData<Integer> getUserAge();
-//
-//    @Query("SELECT UserWeight FROM user_table")
-//    LiveData<Double> getUserWeight();
-
-
-//    //Insert user age
-//    @Insert(onConflict = OnConflictStrategy.IGNORE)
-//    void UserAge(UserProfileEntities UserAge);
-//
-//    //Insert user name
-//    @Insert(onConflict = OnConflictStrategy.IGNORE)
-//    void UserWeight(UserProfileEntities UserWeight);
-//
-//    //Get one course by course ID
-//    @Query("SELECT UserName FROM user_table")
-//    String getUserName();
-//
-//    @Query("SELECT UserAge FROM user_table")
-//    int getUserAge();
-//
-//    @Query("SELECT UserWeight FROM user_table")
-//    double getUserWeight();
-
-
-//    //Update user name
-//    @Update
-//    String UpdateUserName(String UserName);
-//
-//    //Update user name
-//    @Update
-//    int UpdateUserAge(int UserAge);
-//
-//    //Update user name
-//    @Update
-//    double UpdateUserWeight(double UserWeight);
-
-    //Delete all courses
 }
