@@ -6,13 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_table")
-public class UserProfileEntities {
-    //Declare table name
-
-        //Declare table elements
-
-
-
+public class users {
         @PrimaryKey
         @NonNull
         @ColumnInfo(name = "UserName")
@@ -26,7 +20,6 @@ public class UserProfileEntities {
 
         @ColumnInfo(name = "UserSelected")
         private boolean UserSelected;
-
 
         public String getUserName() {
                 return UserName;
@@ -52,19 +45,12 @@ public class UserProfileEntities {
                 UserWeight = userWeight;
         }
 
-        public void deleteAll(){}
-
         public boolean isUserSelected() {
                 return UserSelected;
         }
 
         public void setUserSelected(boolean userSelected) {
                 UserSelected = userSelected;
-        }
-
-        public UserProfileEntities(){
-
-                UserName = null;
         }
 
 }

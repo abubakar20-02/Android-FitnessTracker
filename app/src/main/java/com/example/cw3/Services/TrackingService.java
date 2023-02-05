@@ -23,122 +23,111 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
-import com.example.cw3.Course;
+import com.example.cw3.Activities.NewCourse;
 import com.example.cw3.R;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//Service to track location, time and notifications
-public class MyService extends Service {
+public class TrackingService extends Service {
     private LocationManager locationManager;
     private MyLocationListener listener;
-    private Timer timer = null;
-    private int tickCount = 0;
-
-    //Declare objects and tick count
+    private Timer time = null;
+    private int tick = 0;
+    private double distance = 0.0;
+    private List<LatLng> cords = new ArrayList<>();
     private NotificationManager notifications;
     private NotificationCompat.Builder buildNotification;
 
-    //Getter for notification manager
-    public NotificationManager getNotifications() {
-        return notifications;
-    }
-
-    //Getter for notification builder
-    public NotificationCompat.Builder getBuildNotification() {
-        return buildNotification;
-    }
-
-    //Binder class allowing other applications to bind and create connections
     public class MyBinder extends Binder implements IInterface {
-
-        //Defines interface that specifies how a client can communicate with the service
         @Override
         public IBinder asBinder() {
             return this;
         }
-
-        //Getters for notification objects
-        public void startTimer() {
-            MyService.this.startTimer();
-        }
-        public NotificationManager getNotifications() {
-            return MyService.this.getNotifications();
-        }
-        public NotificationCompat.Builder getBuildNotification() { return MyService.this.getBuildNotification(); }
-        public void startGPS() {
-            MyService.this.startGPS();
-        }
-
+        public NotificationManager getNotifications() { return TrackingService.this.getNotifications(); }
+        public NotificationCompat.Builder getBuildNotification() { return TrackingService.this.getBuildNotification(); }
+        public void setDistance(double distance) { TrackingService.this.setDistance(distance);}
+        public double getDistance() {return TrackingService.this.getDistance();}
+        public void setMap(List<LatLng> latLngs) { TrackingService.this.setUpMap(latLngs);}
+        public List<LatLng> getMap() {return TrackingService.this.getMap();}
     }
 
-    //Initialise notifications
+
+    private NotificationManager getNotifications() {
+        return notifications;
+    }
+
+    private NotificationCompat.Builder getBuildNotification() {
+        return buildNotification;
+    }
+
+    private List<LatLng> getMap() {
+        return cords;
+    }
+
+    private void setUpMap(List<LatLng> latLngs) {
+        this.cords = latLngs;
+    }
+
+    private void setDistance(double distance) {
+        this.distance= distance;
+    }
+
+    public double getDistance(){
+        return distance;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void createNotifications() {
 
-        //Create new notification manager and cancel any notifications in the same ID slot
         notifications = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notifications.cancel(1);
-        String CHANNEL_ID = "100";
-        CharSequence name = "Running App";
-        //Create new notification channel with high importance so notification stays at the top of the list
+        String CHANNEL_ID = "1";
+        CharSequence name = "Fitness app";
+
         NotificationChannel channel = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             channel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
         }
-        //add channel to the notification manager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notifications.createNotificationChannel(channel);
         }
-        //Create new intent between new course activity and this service
-        Intent intent = new Intent(this, Course.class);
+
+        Intent intent = new Intent(this, NewCourse.class);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        //Create pending intent with selected intent
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        //Build notification, setting the notification to silent and making it top priority
-        //Also adding so whenever the notification is pressed it will return to the activity
         buildNotification = new NotificationCompat.Builder(this, CHANNEL_ID).setNotificationSilent().setWhen(0)
                 .setPriority(NotificationCompat.PRIORITY_MAX).setContentIntent(pendingIntent);
     }
 
-//    //Creates pending button intents for the notification bar
-//    @RequiresApi(api = Build.VERSION_CODES.M)
-//    public PendingIntent buttonIntents(String name) {
-//        Intent intent = new Intent(name);
-//        return PendingIntent.getBroadcast(MyService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-//    }
-
-    //Update notification buttons for pausing, resuming and finishing
-    //Add custom notification logo then notify the notification manager of the changes
-    public void startNotifications() {
+    public void startNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            buildNotification.setContentTitle("Running App")
+            buildNotification
+                    .addAction(R.drawable.ic_launcher_background, "Stop", PendingIntent.getBroadcast(TrackingService.this, 0, new Intent("Stop"), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE))
                     .setSmallIcon(R.drawable.running);
-//                    .addAction(R.drawable.ic_launcher_background, "Start", buttonIntents("Start"))
-//                    .addAction(R.drawable.ic_launcher_background, "Finish", buttonIntents("Finish"))
-//                    .addAction(R.drawable.ic_launcher_background, "Pause", buttonIntents("Pause"));
         }
         notifications.notify(1, buildNotification.build());
     }
 
     //Timer thread which updates timer every second, sending a broadcast to be received
-    public void startTimer() {
+    public void startTime() {
 
-        timer = new Timer();
+        time = new Timer();
         TimerTask myTask = new TimerTask() {
             @SuppressLint("DefaultLocale")
             @Override
             public void run() {
-                ++tickCount;
+                ++tick;
                 Intent intentTime = new Intent("Time");
-                intentTime.putExtra("Timer", tickCount);
+                intentTime.putExtra("Timer", tick);
                 sendBroadcast(intentTime);
-                Log.d("ServiceTimer",Integer.toString(tickCount));
             }
         };
-        timer.schedule(myTask, 1000, 1000);
+        time.schedule(myTask, 1000, 1000);
     }
 
     //Location tracker which requests user location at every update, only if permissions enabled
@@ -146,26 +135,15 @@ public class MyService extends Service {
         if (locationManager == null) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             listener = new MyLocationListener();
-            Log.d("Service","Repeating");
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        Log.d("Service","Request Location");
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, listener);
     }
 
-    //Pause GPS by removing location updates
-    public void pauseGPS() {
-        if (locationManager != null) {
-            locationManager.removeUpdates(listener);
-        }
-    }
-
-
-    //Location tracker subclass, on location change send a broadcast with the most recent latitude and longitude
     public class MyLocationListener implements LocationListener {
 
         @Override
@@ -178,22 +156,18 @@ public class MyService extends Service {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-            // information about the signal, i.e. number of satellites
             Log.d("g53mdp", "onStatusChanged: " + provider + " " + status);
         }
         @Override
         public void onProviderEnabled(String provider) {
-            // the user enabled (for example) the GPS
             Log.d("g53mdp", "onProviderEnabled: " + provider);
         }
         @Override
         public void onProviderDisabled(String provider) {
-            // the user disabled (for example) the GPS
             Log.d("g53mdp", "onProviderDisabled: " + provider);
         }
     }
 
-    //On creation of the service instantiate the MyService class and create the notification manager, and start the timer/GPS
     @Override
     public void onCreate() {
         Log.d("g53mdp", "service onCreate");
@@ -201,9 +175,28 @@ public class MyService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             createNotifications();
         }
-        startNotifications();
+        startNotification();
         startGPS();
-        startTimer();
+        startTime();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("g53mdp", "service onStartCommand");
+        startForeground(1, buildNotification.build());
+        return Service.START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d("g53mdp", "service onDestroy");
+        locationManager.removeUpdates(listener);
+        locationManager = null;
+        listener = null;
+        time.cancel();
+        stopForeground(true);
+        notifications.cancelAll();
+        super.onDestroy();
     }
 
     @Override
@@ -212,30 +205,12 @@ public class MyService extends Service {
         return new MyBinder();
     }
 
-    //When the foreground service is started then declare the notification as foregrounded
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("g53mdp", "service onStartCommand");
-        startForeground(1, buildNotification.build());
-        return Service.START_STICKY;
-    }
-
-    //When service ends then reset the threads and cancel all notifications open, stop the foreground service
-    @Override
-    public void onDestroy() {
-        Log.d("g53mdp", "service onDestroy");
-//        stopForeground(true);
-        notifications.cancelAll();
-        super.onDestroy();
-    }
-
     @Override
     public void onRebind(Intent intent) {
         Log.d("g53mdp", "service onRebind");
         super.onRebind(intent);
     }
 
-    //When the task is prematurely ended stop the service
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.d("g53mdp", "service onTaskRemoved");
@@ -243,9 +218,4 @@ public class MyService extends Service {
         stopSelf();
     }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-        Log.d("g53mdp", "service onUnbind");
-        return true;
-    }
 }

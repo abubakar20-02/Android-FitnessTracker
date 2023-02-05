@@ -4,13 +4,12 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.example.cw3.Database.UserProfile;
+import com.example.cw3.Database.UserDB;
 
 public class UserSelectedVM extends ObservableVM{
 
+    // wrong approach (this was the first thing I made.)
     @Bindable
     public String userName;
     @Bindable
@@ -20,12 +19,13 @@ public class UserSelectedVM extends ObservableVM{
     @Bindable
     public String userSelected;
 
-    private final UserProfile repository;
+    private final UserDB userRep;
 
     public UserSelectedVM(@NonNull Application application) {
         super(application);
-        repository= new UserProfile(application);
+        userRep = new UserDB(application);
     }
+
     public void addUserName(String UserName){
         userName=UserName;
     }
@@ -36,9 +36,7 @@ public class UserSelectedVM extends ObservableVM{
         userWeight=Double.toString(Weight);
     }
     public void addUserSelected(boolean selected) {userSelected= String.valueOf(selected);}
-    public void DeleteProfile(){
-        repository.deleteUserProfile(userName);
-    }
-    public void RemoveAllSelectedProfile() { repository.update(false); }
-    public void selectProfile() { repository.selectProfile(userName); }
+    public void DeleteProfile(){ userRep.deleteUserProfile(userName);}
+    public void RemoveAllSelectedProfile() { userRep.setAllUserSelectedTo(false); }
+    public void selectProfile() { userRep.selectProfile(userName); }
 }

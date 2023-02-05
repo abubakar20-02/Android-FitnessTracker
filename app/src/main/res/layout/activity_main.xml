@@ -6,24 +6,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <Button
-        android:id="@+id/ProfileButton"
-        android:layout_width="230dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/roundbutton"
-        android:text="@string/ProfileButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StatisticButton" />
+    tools:context=".Activities.MainActivity">
 
     <Button
         android:id="@+id/StatisticButton"
         android:layout_width="230dp"
         android:layout_height="48dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/roundbutton"
         android:text="@string/StatisticButtonText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,12 +34,12 @@
         android:id="@+id/StartButton"
         android:layout_width="230dp"
         android:layout_height="48dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/roundbutton"
         android:text="@string/StartButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Title" />
+        app:layout_constraintTop_toBottomOf="@+id/RunningLogo" />
 
     <TextView
         android:id="@+id/RunningLogo"

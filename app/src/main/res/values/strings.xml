@@ -18,5 +18,16 @@
     <string name="CaloriesBurntText">Calories burnt: </string>
     <string name="ElapsedTimeText">Elapsed Time:</string>
     <string name="DistanceText">Distance</string>
-    <string name="SpeedText">"Speed: "</string>
+    <string name="SpeedText">Speed: </string>
+    <string name="CourseViewText">Course</string>
+    <string name="totalDistanceText">Total distance: </string>
+    <string name="totalTimeText">Total time</string>
+    <string name="averageSpeedText">Average speed: </string>
+    <string name="ratingText">Rate the run:</string>
+    <string name="dateText">Date:</string>
+    <string name="noteText">Note:</string>
+    <string name="courseNameText">Course name:</string>
+    <string name="coursesText">Courses:</string>
+    <string name="sortBy">Sort by:</string>
+    <string name="overAllStatistics">Overall statistics</string>
 </resources>

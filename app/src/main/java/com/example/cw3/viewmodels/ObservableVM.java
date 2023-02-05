@@ -1,14 +1,12 @@
 package com.example.cw3.viewmodels;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Observable;
 import androidx.databinding.PropertyChangeRegistry;
 import androidx.lifecycle.AndroidViewModel;
 
-//Create observable viewmodel to implement data binding
 public class ObservableVM extends AndroidViewModel implements Observable {
 
     PropertyChangeRegistry callbacks = new PropertyChangeRegistry();
@@ -27,12 +25,7 @@ public class ObservableVM extends AndroidViewModel implements Observable {
         callbacks.remove(callback);
     }
 
-    public void notifyChange() {
-        callbacks.notifyCallbacks(this, 0, null);
-    }
-
     public void notifyPropertyChanged(int fieldId) {
-        Log.d("callback", "true");
         callbacks.notifyCallbacks(this, fieldId, null);
     }
 }

@@ -5,12 +5,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.cw3.viewmodels.CourseVM" />
+            type="com.example.cw3.viewmodels.NewCourseVM" />
     </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Course">
+    tools:context=".Activities.NewCourse">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/maps"
@@ -25,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SpeedText"
-        tools:context=".activities.NewCourse"
+        tools:context=".Activities.NewCourse"
         tools:layout="@android:layout/simple_gallery_item" />
 
     <Button

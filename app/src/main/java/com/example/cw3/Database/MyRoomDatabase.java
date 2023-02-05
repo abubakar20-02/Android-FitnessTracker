@@ -9,33 +9,33 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.cw3.DAO.CourseDao;
-import com.example.cw3.DAO.UserProfileDao;
+import com.example.cw3.DAO.courseDAO;
+import com.example.cw3.DAO.cordsDAO;
+import com.example.cw3.DAO.userDAO;
 import com.example.cw3.entities.Course;
-import com.example.cw3.entities.UserProfileEntities;
+import com.example.cw3.entities.cords;
+import com.example.cw3.entities.users;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-//Declare database entities
-@Database(entities = {Course.class, UserProfileEntities.class}, version = 11, exportSchema = false) // drop and recreate
+@Database(entities = {Course.class, users.class, cords.class}, version = 11, exportSchema = false)
 public abstract class MyRoomDatabase extends RoomDatabase {
 
-    //Declare dao objects
-    public abstract CourseDao courseDao();
-    public abstract UserProfileDao userProfileDao();
+    public abstract courseDAO courseDao();
+    public abstract userDAO userProfileDao();
+    public abstract cordsDAO cordsDao();
 
     private static volatile MyRoomDatabase INSTANCE;
-    private static final int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = 6;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    //Database getter
     static MyRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (MyRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    MyRoomDatabase.class, "runningDatabase")
+                                    MyRoomDatabase.class, "Database")
                             .fallbackToDestructiveMigration()
                             .addCallback(createCallback)
                             .build();
@@ -45,7 +45,6 @@ public abstract class MyRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    //When database created make sure all tables clear
     private static final RoomDatabase.Callback createCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -54,11 +53,14 @@ public abstract class MyRoomDatabase extends RoomDatabase {
             Log.d("g53mdp", "Database Created");
             databaseWriteExecutor.execute(() -> {
 
-                CourseDao courseDao = INSTANCE.courseDao();
+                courseDAO courseDao = INSTANCE.courseDao();
                 courseDao.deleteAll();
 
-                UserProfileDao userProfileDao = INSTANCE.userProfileDao();
-                userProfileDao.deleteAll();
+                userDAO userDAO = INSTANCE.userProfileDao();
+                userDAO.deleteAll();
+
+                cordsDAO cordsDao = INSTANCE.cordsDao();
+                cordsDao.deleteAll();
             });
         }
     };
